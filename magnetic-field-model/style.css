@@ -1,0 +1,156 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: 'Roboto', sans-serif;
+}
+
+html, body, #wrapper {
+    height: 100%;
+    overflow: hidden;
+}
+
+.block {
+    background-color: white;
+    border-radius: 8px;
+    padding: 16px;
+
+    -webkit-box-shadow: 0px 3px 10px 0px rgba(34, 60, 80, 0.15);
+    -moz-box-shadow: 0px 3px 10px 0px rgba(34, 60, 80, 0.15);
+    box-shadow: 0px 3px 10px 0px rgba(34, 60, 80, 0.15);
+}
+
+#header, #controls {
+    display: flex;
+    align-items: center;
+}
+
+#header h1 {
+    font-size: 1.1rem;
+    font-weight: 900;
+}
+
+#header h2 {
+    font-size: 0.95rem;
+    font-weight: 400;
+    margin-left: 16px;
+}
+
+.joke {
+    color: red;
+    text-decoration: line-through;
+}
+
+#controls {
+    display: flex;
+    flex-direction: column;
+}
+
+#induction-value {
+    font-weight: 900;
+}
+
+#meta {
+    display: flex;
+    align-items: center;
+}
+
+#add-button {
+    height: 100%;
+    width: 40px;
+    border: none;
+    font-weight: 900;
+    margin-left: 8px;
+}
+
+#conductor-list {
+    display: flex;
+    padding: 16px;
+}
+
+.conductor {
+    position: relative;
+
+    background-color: white;
+    border-radius: 8px;
+    padding: 16px;
+
+    -webkit-box-shadow: 0px 3px 10px 0px rgba(34, 60, 80, 0.15);
+    -moz-box-shadow: 0px 3px 10px 0px rgba(34, 60, 80, 0.15);
+    box-shadow: 0px 3px 10px 0px rgba(34, 60, 80, 0.15);
+
+    margin-left: 16px;
+    max-width: 150px;
+}
+
+.conductor:first-child {
+    margin-left: 0;
+}
+
+.conductor .close {
+    padding: 4px;
+    background-color: lightcoral;
+    color: white;
+    font-weight: 900;
+    border-radius: 4px;
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    height: 24px;
+    width: 24px;
+}
+
+.conductor .close:hover {
+    background-color: red;
+}
+
+.coordinates-row {
+    display: flex;
+    margin-top: 8px;
+}
+
+.coordinates-row > * {
+    width: 50%;
+}
+
+.coordinates-row > *:first-child {
+    margin-right: 8px;
+}
+
+.input-border {
+    border-radius: 4px;
+    padding: 6px 6px;
+    background-color: #eeeeee;
+}
+
+.input-border input {
+    border: none;
+    outline: none;
+    width: 100%;
+    background-color: #eeeeee;
+}
+
+.color-row {
+    margin-top: 8px;
+}
+
+.ui-wrapper {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+}
+
+.ui-header-wrapper {
+    left: 0;
+    top: 0;
+}
+
+.ui-footer-wrapper {
+    left: 0;
+    bottom: 0;
+}

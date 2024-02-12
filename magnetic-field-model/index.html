@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Field2D</title>
+    
+    <link rel="stylesheet" href="./style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="wrapper">
+        <canvas id="canvas" height="400" width="600"></canvas>
+
+        <div class="ui-wrapper ui-header-wrapper">
+            <div id="header" class="block">
+                <h1>Field2D</h1>
+                <h2><span class="joke">Крайне неоптимизированная</span> Визуализация магнитного поля для произвольного количества прямых проводников</h2>    
+            </div>
+        </div>
+
+        <div class="ui-wrapper ui-footer-wrapper">	
+            <div id="controls">
+                <div id="meta">
+                    <div class="block induction-info">
+                        <span>Индукция в точке:</span> <span id="induction-value">(нажмите на точку поля)</span> Тл
+                    </div>
+                    <button id="add-button" class="block">+</button>
+                </div>
+                <div id="conductor-list"></div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/app.js" type="module"></script>
+</body>
+</html> 
