@@ -61,6 +61,38 @@ export class Point2D {
     }
 }
 
+export class Rectangle2D {
+    constructor(topLeft, bottomRight) {
+        this.topLeft = topLeft;
+        this.bottomRight = bottomRight;
+    }
+
+    includesPoint(point) {
+        return (
+            point.x >= this.topLeft.x && point.x <= this.bottomRight.x &&
+            point.y <= this.topLeft.y && point.y >= this.bottomRight.y
+        );
+    }
+
+    static fromCenterAndSize(center, width, height) {
+        const dx = width / 2;
+        const dy = height / 2;
+        
+        return new Rectangle2D(
+            new Point2D(center.x - dx, center.y + dy),
+            new Point2D(center.x + dx, center.y - dy)
+        );
+    }
+
+    static fromCornerAndSize(corner, width, height) {
+        return new Rectangle2D(
+            corner,
+            new Point2D(corner.x + width, corner.y + height)
+        );
+    }
+}
+
+
 export function getRandomPointInRectangle(topLeft, bottomRight) {
     const x = Math.random() * (bottomRight.x - topLeft.x) + topLeft.x;
     const y = Math.random() * (topLeft.y - bottomRight.y) + bottomRight.y;
