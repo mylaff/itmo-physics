@@ -1,7 +1,7 @@
 import { Camera } from "./camera.js";
 import { ConductorArray, createRandomConductor, calculateInductionMatrixForRegion } from "./conductor.js";
-import { CircleDrawable, ConductorDrawable, RectangleDrawable, TriangleDrawable, VectorDrawable, clearCanvas } from "./drawing.js";
-import { Point2D, Vector2D } from "./space.js";
+import { ConductorDrawable, RectangleDrawable, VectorDrawable, clearCanvas } from "./drawing.js";
+import { Point2D, Rectangle2D, Vector2D } from "./space.js";
 import { renderConductorList, parseConductorFromElement } from "./ui.js";
 
 let canvas;
@@ -19,28 +19,26 @@ let debugOptions = {
 let displayOptions = {
     baseFieldVectorLengthMultiplier: 1000,
     fieldInPointVectorLengthMultiplier: 1000,
-    exponentialFractionDigits: 3
+    exponentialFractionDigits: 3,
+    utilizeConductorDeadZones: true
 }
 
-function renderCameraVisibleRectangle(camera) {
-    (new RectangleDrawable(...camera.getVisibleRectangle())).draw(camera, {strokeStyle: "yellow"});
+function buildConductorDeadZones() {
+    const deadZoneFactor = 45;
+
+    return conductors.get().map(c => 
+        Rectangle2D.fromCenterAndSize(
+            c.center, 
+            0.1 * (Math.abs(c.amperage) / deadZoneFactor), 
+            0.1 * (Math.abs(c.amperage) / deadZoneFactor))
+    );
 }
 
-function renderWorldRectangle(camera) {
-    (new RectangleDrawable(new Point2D(-1, 1), new Point2D(1, -1))).draw(camera);
-}
-
-function renderMatrix(camera, matrix, width, height) {
-    const vectorLengthMultiplier = displayOptions.baseFieldVectorLengthMultiplier;
-
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-            const { point, vector } = matrix[y][x];
-            const vectorDrawable = new VectorDrawable(point, vector, vectorLengthMultiplier);
-
-            vectorDrawable.draw(camera, {});
-        }
-    }
+function doesAnyRectangleIncludePoint(rectangles, point) {
+    for (const rectangle of rectangles)
+        if (rectangle.includesPoint(point))
+            return true;
+    return false;
 }
 
 function getMatrixFittingScreen() {
@@ -51,17 +49,42 @@ function getMatrixFittingScreen() {
     return [resolution, resolution, matrix];
 }
 
-function render() {
-    clearCanvas(context);
+function renderCameraVisibleRectangle(camera) {
+    (new RectangleDrawable(...camera.getVisibleRectangle())).draw(camera, {strokeStyle: "yellow"});
+}
 
-    const [matrixWidth, matrixHeight, matrix] = getMatrixFittingScreen();
-    renderMatrix(camera, matrix, matrixWidth, matrixHeight);
+function renderWorldRectangle(camera) {
+    (new RectangleDrawable(new Point2D(-1, 1), new Point2D(1, -1))).draw(camera);
+}
 
-    for (const conductor of conductors.get()) {
+function renderMatrix(camera, matrix, width, height, deadZones = []) {
+    const vectorLengthMultiplier = displayOptions.baseFieldVectorLengthMultiplier;
+
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const { point, vector } = matrix[y][x];
+            const vectorDrawable = new VectorDrawable(point, vector, vectorLengthMultiplier);
+
+            if (!doesAnyRectangleIncludePoint(deadZones, point)) vectorDrawable.draw(camera, {});
+        }
+    }
+}
+
+function renderConductors(conductors) {
+    for (const conductor of conductors) {
         const conductorDrawable = new ConductorDrawable(conductor);
 
         conductorDrawable.draw(camera);
     }
+}
+
+function render() {
+    clearCanvas(context);
+
+    const [matrixWidth, matrixHeight, matrix] = getMatrixFittingScreen();
+    const deadZones = displayOptions.utilizeConductorDeadZones ? buildConductorDeadZones() : [];
+    renderMatrix(camera, matrix, matrixWidth, matrixHeight, deadZones);
+    renderConductors(conductors.get());
 
     if (debugOptions.showWorldRectangle) renderWorldRectangle(camera);
     if (debugOptions.showCameraRectangle) renderCameraVisibleRectangle(camera);
