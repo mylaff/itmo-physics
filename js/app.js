@@ -158,7 +158,7 @@ function handleAddButtonClick(event) {
 function handleConductorRemoveClick(id) {
     if (conductors.get().length == 1) return;
 
-    removeConductorById(id);
+    conductors.removeConductorById(id);
     renderConductorList(conductors, handleConductorUpdate, handleConductorRemoveClick);
 
     render();
