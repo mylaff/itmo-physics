@@ -27,12 +27,13 @@ export class CircleDrawable extends Drawable {
     draw(camera, options) {
         const drawingCenter = this.deducePointPosition(this.center, camera, options);
         const drawingRadius = this.adjustForZoom(this.radius, camera, options);
+        const lineWidth = this.adjustForZoom(options?.lineWidth || 2, camera, options);
 
         camera.context.beginPath();
         camera.context.arc(drawingCenter.x, drawingCenter.y, drawingRadius, 0, Math.PI * 2);
         camera.context.closePath();
 
-        camera.context.lineWidth = options?.lineWidth || 2;
+        camera.context.lineWidth = lineWidth;
         camera.context.strokeStyle = options?.strokeStyle || "black";
         camera.context.fillStyle = options?.fillStyle || "black";
 
@@ -53,12 +54,13 @@ export class LineDrawable extends Drawable {
     draw(camera, options) {
         const start = this.deducePointPosition(this.start, camera, options);
         const end = this.deducePointPosition(this.end, camera, options);
+        const lineWidth = this.adjustForZoom(this.width || options?.lineWidth || 2, camera, options);
 
         camera.context.beginPath();
         camera.context.moveTo(start.x, start.y);
         camera.context.lineTo(end.x, end.y);
 
-        camera.context.lineWidth = this.width * camera.getZoom();
+        camera.context.lineWidth = lineWidth;
         camera.context.strokeStyle = options?.strokeStyle || "black";
 
         camera.context.stroke();
@@ -126,11 +128,12 @@ export class RectangleDrawable extends Drawable {
         const topLeft = this.deducePointPosition(this.topLeft, camera, options);
         const bottomRight = this.deducePointPosition(this.bottomRight, camera, options);
         const rectangleSize = bottomRight.subtractPoint(topLeft);
+        const lineWidth = this.adjustForZoom(options?.lineWidth || "6", camera, options);
 
         camera.context.beginPath();
         camera.context.rect(topLeft.x, topLeft.y, rectangleSize.dx, rectangleSize.dy);
 
-        camera.context.lineWidth = options?.lineWidth || "6";
+        camera.context.lineWidth = lineWidth;
         camera.context.strokeStyle = options?.strokeStyle || "red";
 
         camera.context.stroke();
