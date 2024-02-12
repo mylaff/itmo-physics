@@ -143,6 +143,9 @@ function initializeAppControlBindings() {
                 camera.resetPosition();
                 render();
                 break;
+            case 'KeyC':
+                render();
+                break;
         }
     })
 }
